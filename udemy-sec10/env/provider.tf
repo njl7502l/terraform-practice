@@ -7,14 +7,14 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "terraform-state-for-njl7502l-terraform-practice"
+    bucket = "njl7502l-terraform-practice-udemy-sec10-tfstate"
     key    = "terraform.tfstate"
     region = "ap-northeast-1"
-    profile = "hanazono"
+    profile = "hanazono_terraform_deployer"
   }
 }
 
 provider "aws" {
   region = "ap-northeast-1"
-  profile = "hanazono"
+  profile = "hanazono_terraform_deployer"
 }
