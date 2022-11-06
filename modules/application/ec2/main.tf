@@ -53,7 +53,7 @@ data "aws_ssm_parameter" "amzn2_ami" {
 }
 
 resource "aws_instance" "testEC2" {
-  for_each = toset([for az in var.subnet_azs : var.subnet_public_ids["web,${az}"]])
+  for_each = var.set_public_ids
 
   ami                         = data.aws_ssm_parameter.amzn2_ami.value
   instance_type               = "t2.micro"
@@ -64,8 +64,4 @@ resource "aws_instance" "testEC2" {
   user_data                   = file("../../modules/application/ec2/user_data.sh")
   vpc_security_group_ids      = [var.sg_web_ec2_id]
   associate_public_ip_address = "true" # ipアドレスの自動割当設定
-
-  depends_on = [
-    var.subnet_public_ids
-  ]
 }

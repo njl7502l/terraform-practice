@@ -37,9 +37,17 @@ module "application_s3" {
 }
 
 module "application_ec2" {
-  source            = "../../modules/application/ec2"
-  common            = var.common
-  subnet_azs        = var.subnet.azs
-  subnet_public_ids = module.network_subnet_public.public_ids
-  sg_web_ec2_id     = module.network_sg.sg_web_ec2_id
+  source         = "../../modules/application/ec2"
+  common         = var.common
+  sg_web_ec2_id  = module.network_sg.sg_web_ec2_id
+  set_public_ids = module.network_subnet_public.set_public_ids
+}
+
+module "application_lb" {
+  source         = "../../modules/application/lb"
+  common         = var.common
+  vpc_id         = module.network_vpc.vpc_id
+  instance_ids   = module.application_ec2.instance_ids
+  set_public_ids = module.network_subnet_public.set_public_ids
+  sg_web_ec2_id  = module.network_sg.sg_web_ec2_id
 }
